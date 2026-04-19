@@ -1,0 +1,1 @@
+// export const emailValidation = { required: "email is required" }
