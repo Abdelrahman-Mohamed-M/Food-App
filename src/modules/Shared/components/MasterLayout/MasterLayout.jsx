@@ -4,12 +4,12 @@ import SideBar from "../Sidebar/SideBar";
 import Header from "../Header/Header";
 import NavBar from "../NavBar/NavBar";
 
-export default function MasterLayout() {
+export default function MasterLayout({loginData ,setLoginData}) {
   return (
     <div className=" d-flex">
-      <SideBar />
+      <SideBar setLoginData={setLoginData} />
       <div className="w-100">
-        <NavBar />
+        <NavBar loginData={loginData} />
         <Header />
         <Outlet />
       </div>

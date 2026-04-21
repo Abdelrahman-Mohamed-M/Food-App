@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AUTH_URLS } from "../../../../Constants/END-Pointes";
 
-export default function Login() {
+export default function Login({ saveLoginData }) {
   const {
     register,
     handleSubmit,
@@ -16,9 +16,9 @@ export default function Login() {
     try {
       let response = await axios.post(AUTH_URLS.login, data);
       toast.success("Login Successfully");
-
       navigate("/dashboard");
       localStorage.setItem("token", response.data.token);
+      saveLoginData();
     } catch (error) {
       console.log(error);
       toast.error("Failed to login");

@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export default function NavBar() {
-  return (
-    <div>
-      NavBar
-    </div>
-  )
+export default function NavBar({ loginData }) {
+  return <div>NavBar {loginData?.userName}</div>;
 }
