@@ -60,8 +60,8 @@ function App() {
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard /> },
-        { path: "", element: <Dashboard /> },
+        { index: true, element: <Dashboard loginData={loginData} /> },
+        { path: "", element: <Dashboard loginData={loginData} /> },
         { path: "recipes", element: <RecipesList /> },
         { path: "recipe-data", element: <RecipeData /> },
         { path: "categories", element: <CategoriesList /> },

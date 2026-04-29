@@ -10,3 +10,27 @@
     rgba(0, 0, 0, 0.6237) 61.76%
   );
 }
+.header-bg {
+  background-image: url("./assets/images/header.jpeg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.sidebar-container .ps-sidebar-root {
+  border: none;
+}
+.sidebar-container .ps-sidebar-container {
+  margin-top: 3px;
+  background: rgba(31, 38, 62, 1);
+  height: 100vh;
+  border-top-right-radius: 70px;
+}
+
+.sidebar-container .ps-menu-button {
+  color: #fff !important;
+  transition: 0.3s all;
+}
+.sidebar-container .ps-menu-button:hover {
+  background-color: rgba(0, 146, 77, 0.1) !important;
+  border-left: 5px solid rgba(0, 146, 71, 1) !important;
+}
