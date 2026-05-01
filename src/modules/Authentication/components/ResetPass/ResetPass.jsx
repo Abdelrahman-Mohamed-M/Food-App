@@ -1,35 +1,33 @@
-
-import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AUTH_URLS } from "../../../../Constants/END-Pointes";
+import { AuthAPI } from "../../../../api";
 
 export default function ResetPass() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
 
-  const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      setLoading(true); // يبدأ التحميل
-      let response = await axios.post(AUTH_URLS.login, data);
-      console.log(response);
+      setLoading(true);
+      let response = await AuthAPI.Resetpass(data);
       toast.success("Password Reset Successfully");
       navigate("/login");
     } catch (error) {
       console.log(error);
       toast.error("Something Wronge");
     } finally {
-      setLoading(false); // ينتهي التحميل
+      setLoading(false);
     }
   };
   return (
@@ -182,6 +180,8 @@ export default function ResetPass() {
                   // "Password must include uppercase, lowercase, number, and special character",
                   "Password Not Valid",
               },
+              validate: (value) =>
+                value === watch("password") || "Passwords do not match",
             })}
           />
           <span

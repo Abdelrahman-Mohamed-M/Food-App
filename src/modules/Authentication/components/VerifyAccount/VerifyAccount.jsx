@@ -1,12 +1,11 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AUTH_URLS } from "../../../../Constants/END-Pointes";
+import { AuthAPI } from "../../../../api";
 
 export default function VerifyAccount() {
-  const [loading, setLoading] = useState(false); // حالة التحميل
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -16,16 +15,15 @@ export default function VerifyAccount() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      setLoading(true); // يبدأ التحميل
-      let response = await axios.put(AUTH_URLS.verifyAccount, data);
-      console.log(response);
+      setLoading(true);
+      let response = await AuthAPI.VerifyAccount(data);
       toast.success("User Verified Successfully");
       navigate("/login");
     } catch (error) {
       console.log(error);
       toast.error("Something Wronge");
     } finally {
-      setLoading(false); // ينتهي التحميل
+      setLoading(false);
     }
   };
   return (
@@ -99,20 +97,20 @@ export default function VerifyAccount() {
         {errors.code && (
           <span className=" badge bg-danger mt-1">{errors.code.message}</span>
         )}
-          <button
-            className="btn btn-success w-100 fw-bold my-4 py-1 d-flex justify-content-center align-items-center"
-            type="submit"
-            disabled={loading} // تعطيل الزر أثناء التحميل
-          >
-            {loading ? (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : null}
-            {loading ? "Loading..." : "Send"}
-          </button>
+        <button
+          className="btn btn-success w-100 fw-bold my-4 py-1 d-flex justify-content-center align-items-center"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <span
+              className="spinner-border spinner-border-sm me-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : null}
+          {loading ? "Loading..." : "Send"}
+        </button>
       </form>
     </div>
   );

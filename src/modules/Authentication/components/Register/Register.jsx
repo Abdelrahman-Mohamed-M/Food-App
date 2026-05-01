@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AUTH_URLS } from "../../../../Constants/END-Pointes";
+import { AuthAPI } from "../../../../api";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,7 +21,7 @@ export default function Register() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      let response = await axios.post(AUTH_URLS.register, data);
+      let response = await AuthAPI.Register(data);
 
       toast.success("Register Successfully");
       navigate("/verify-account");
@@ -231,20 +230,20 @@ export default function Register() {
         </div>
 
         {/* Register Button */}
-          <button
-            className="btn btn-success w-100 fw-bold my-4 py-1 d-flex justify-content-center align-items-center"
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : null}
-            {loading ? "Loading..." : "Register"}
-          </button>
+        <button
+          className="btn btn-success w-100 fw-bold my-4 py-1 d-flex justify-content-center align-items-center"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <span
+              className="spinner-border spinner-border-sm me-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : null}
+          {loading ? "Loading..." : "Register"}
+        </button>
       </form>
     </div>
   );
