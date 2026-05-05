@@ -51,12 +51,9 @@ function App() {
     {
       path: "dashboard",
       element: (
-        <ProtectedRoutes loginData={loginData}>
-          <MasterLayout
-            loginData={loginData}
-            setLoginData={setLoginData}
-          />{" "}
-        </ProtectedRoutes>
+        // <ProtectedRoutes loginData={loginData}>
+        <MasterLayout loginData={loginData} setLoginData={setLoginData} />
+        // </ProtectedRoutes>
       ),
       errorElement: <NotFound />,
       children: [

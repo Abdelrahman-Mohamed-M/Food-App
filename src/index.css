@@ -16,6 +16,14 @@
   background-size: cover;
 }
 
+.sidebar-container {
+  flex: 1;
+  min-width: 0;
+  position: sticky;
+  bottom: 0;
+  top: 0;
+}
+
 .sidebar-container .ps-sidebar-root {
   border: none;
 }
@@ -34,17 +42,29 @@
   border-left: 5px solid rgba(0, 146, 71, 1) !important;
 }
 
-.categories-container .dropdown-toggle::after{
+.categories-container .dropdown-toggle::after,
+.recipes-container .dropdown-toggle::after {
   display: none;
+}
 
- }
-
-.categories-container .custom-dropdown {
+.categories-container .custom-dropdown,
+.recipes-container .custom-dropdown {
   border-radius: 10px;
   min-width: 130px;
 }
 
-.categories-container .custom-dropdown .dropdown-item {
+.categories-container .custom-dropdown .dropdown-item,
+.recipes-container .custom-dropdown .dropdown-item {
   font-size: 14px;
   transition: background 0.2s;
+}
+.table-img {
+  width: 50px;
+}
+.table tbody {
+  vertical-align: middle;
+}
+
+.table .table-head th {
+  background-color: rgba(226, 229, 235, 1) !important;
 }

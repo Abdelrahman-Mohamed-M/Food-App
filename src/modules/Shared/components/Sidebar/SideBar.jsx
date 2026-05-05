@@ -36,7 +36,7 @@ export default function SideBar({ setLoginData }) {
             Users{" "}
           </MenuItem>
           <MenuItem
-            icon={<i className="fa-regular fa-rectangle-list" />}
+            icon={<i className="fa-solid fa-utensils" />}
             component={<Link to="/dashboard/recipes" />}
           >
             {" "}

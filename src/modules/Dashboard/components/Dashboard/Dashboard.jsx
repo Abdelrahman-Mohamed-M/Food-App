@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../../Shared/components/Header/Header";
 import headerImg from "../../../../assets/images/header-girl.png";
+import FillRecipes from "../../../Shared/components/FillRecipes/FillRecipes";
 
 export default function Dashboard({ loginData }) {
   return (
@@ -15,6 +16,7 @@ export default function Dashboard({ loginData }) {
         secPading={"py-3"}
         imgWidth={"w-75"}
       />
+      <FillRecipes navTo={"recipes"} />
     </div>
   );
 }
