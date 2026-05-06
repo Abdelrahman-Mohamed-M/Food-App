@@ -43,20 +43,17 @@
 }
 
 .categories-container .dropdown-toggle::after,
+.users-container .dropdown-toggle::after,
 .recipes-container .dropdown-toggle::after {
   display: none;
 }
 
-.categories-container .custom-dropdown,
-.recipes-container .custom-dropdown {
-  border-radius: 10px;
-  min-width: 130px;
-}
-
 .categories-container .custom-dropdown .dropdown-item,
+.users-container .custom-dropdown .dropdown-item,
 .recipes-container .custom-dropdown .dropdown-item {
   font-size: 14px;
   transition: background 0.2s;
+  z-index: 1000;
 }
 .table-img {
   width: 50px;
@@ -67,4 +64,68 @@
 
 .table .table-head th {
   background-color: rgba(226, 229, 235, 1) !important;
+}
+.table-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.custom-table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.custom-table thead th {
+  background-color: #e9edf2 !important;
+  color: #1f263e;
+  font-weight: 600;
+  padding: 18px;
+  border: none;
+  font-size: 14px;
+}
+
+.custom-table thead th:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.custom-table thead th:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.custom-table tbody tr {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.custom-table tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.custom-table tbody td {
+  padding: 18px;
+  border: none;
+  font-size: 14px;
+  color: #555;
+}
+
+.custom-table tbody td:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.custom-table tbody td:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9fbfc;
 }

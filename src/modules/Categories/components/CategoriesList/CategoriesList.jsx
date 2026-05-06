@@ -7,10 +7,9 @@ import { toast } from "react-toastify";
 import NoData from "../../../Shared/components/NoData/NoData";
 import axiosClient from "../../../../api/axiosClient";
 import DeleteConfirmation from "../../../Shared/components/DeleteConfirm/DeleteConfirm";
-// import AddModal from "../../../Shared/components/AddModal/AddModal";
 import { Modal, Button } from "react-bootstrap";
 
-import { useForm } from "react-hook-form";
+import CategoryData from "../CategoryData/CategoryData";
 
 export default function CategoriesList() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -24,30 +23,21 @@ export default function CategoriesList() {
     setSelectedItem(category);
     setShow(true);
   };
-  // Add Modal
-  const [addshow, setAddShow] = useState(false);
-  const handleAddClose = () => setAddShow(false);
-  const handleAddShow = () => setAddShow(true);
+  // Add & Edit Modal
+  const [showModal, setShowModal] = useState(false);
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedItem(null);
+  };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const handleEditShow = (category) => {
+    setSelectedItem(category);
+    setShowModal(true);
+  };
 
-  const onAddSubmit = async (data) => {
-    try {
-      let response = await CategoriesAPI.CreateCategory(data);
-      toast.success(`Category  Added successfully`, {
-        theme: "dark",
-        autoClose: 1000,
-      });
-      getCategoriesList();
-      handleAddClose();
-    } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong");
-      handleAddClose();
-    }
+  const handleAddShow = () => {
+    setSelectedItem(null);
+    setShowModal(true);
   };
   const getCategoriesList = async () => {
     setIsLoading(true);
@@ -63,7 +53,7 @@ export default function CategoriesList() {
   };
   const deleteCategories = async () => {
     try {
-      let response = await axiosClient.delete(`/Category/${selectedItem.id}`);
+      await axiosClient.delete(`/Category/${selectedItem.id}`);
       toast.success(`${selectedItem.name} Deleted successfully`, {
         theme: "dark",
         autoClose: 1000,
@@ -100,32 +90,13 @@ export default function CategoriesList() {
         itemName={selectedItem?.name}
         itemType={"Category"}
       />
-      {/* Add Modal */}
-      <Modal show={addshow} onHide={handleAddClose} centered>
-        <Modal.Header closeButton className=" fw-bolder  ">
-          Add New Category
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={handleSubmit(onAddSubmit)}>
-            <div className=" input-group my-2">
-              <input
-                type="text"
-                className=" form-control"
-                placeholder="Category Name"
-                {...register("name", { required: "Category Name is Required" })}
-              />
-            </div>
-            {errors.name && (
-              <span className=" text-danger">{errors.name.message}</span>
-            )}
-            <div className="text-end">
-              <button className="btn btn-outline-success fw-bold m-2">
-                Save
-              </button>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
+
+      <CategoryData
+        show={showModal}
+        handleClose={handleModalClose}
+        selectedCategory={selectedItem}
+        getCategoriesList={getCategoriesList}
+      />
       <div className="d-flex justify-content-between  mt-5 mx-4">
         <div className="content">
           <h4 className=" fw-bold">Categories Table Details</h4>
@@ -147,60 +118,64 @@ export default function CategoriesList() {
             <p className="mt-2">Loading Categories...</p>
           </div>
         ) : categoriesList.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr className=" text-center table-head">
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Creation Date</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categoriesList.map((category) => (
-                <tr className=" text-center" key={category.id}>
-                  <th scope="row">{category.id}</th>
-                  <td>{category.name}</td>
-                  <td>
-                    {new Date(category?.creationDate).toLocaleDateString()}
-                  </td>
-                  <td>
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="link"
-                        className=" p-0 border-0 no-caret shadow-none  text-dark"
-                      >
-                        <i className="fa-solid fa-ellipsis  " />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="shadow border-0 py-2 custom-dropdown">
-                        <Dropdown.Item
-                          href="#/view"
-                          className="text-success py-2 d-flex align-items-center"
-                        >
-                          <i className="fa-solid fa-eye me-2 text-success" />
-                          View
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          href="#/edit"
-                          className="text-success py-2 d-flex align-items-center"
-                        >
-                          <i className="fa-regular fa-pen-to-square me-2 text-info " />{" "}
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          className="text-danger py-2 d-flex align-items-center"
-                          onClick={() => handleShow(category)}
-                        >
-                          <i className="fa-regular fa-trash-can me-2 text-danger" />
-                          Delete
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
+          <div className="table-container">
+            <table className="table custom-table">
+              <thead>
+                <tr className="text-center table-head">
+                  <th scope="col">Id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Creation Date</th>
+                  <th scope="col">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {categoriesList.map((category) => (
+                  <tr key={category.id} className="text-center">
+                    <td scope="col">{category.id}</td>
+                    <td scope="col">{category.name}</td>
+                    <td scope="col">
+                      {new Date(category.creationDate).toLocaleDateString()}
+                    </td>
+
+                    <td scope="col">
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="link"
+                          className="p-0 border-0 no-caret shadow-none text-dark"
+                        >
+                          <i className="fa-solid fa-ellipsis" />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="shadow border-0 py-2 custom-dropdown">
+                          <Dropdown.Item className="text-success py-2 d-flex align-items-center">
+                            <i className="fa-solid fa-eye me-2 text-success" />
+                            View
+                          </Dropdown.Item>
+
+                          <Dropdown.Item
+                            className="text-success py-2 d-flex align-items-center"
+                            onClick={() => handleEditShow(category)}
+                          >
+                            <i className="fa-regular fa-pen-to-square me-2 text-info" />
+                            Edit
+                          </Dropdown.Item>
+
+                          <Dropdown.Item
+                            className="text-danger py-2 d-flex align-items-center"
+                            onClick={() => handleShow(category)}
+                          >
+                            <i className="fa-regular fa-trash-can me-2 text-danger" />
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <NoData />
         )}

@@ -51,16 +51,16 @@ function App() {
     {
       path: "dashboard",
       element: (
-        // <ProtectedRoutes loginData={loginData}>
-        <MasterLayout loginData={loginData} setLoginData={setLoginData} />
-        // </ProtectedRoutes>
+        <ProtectedRoutes loginData={loginData}>
+          <MasterLayout loginData={loginData} setLoginData={setLoginData} />
+        </ProtectedRoutes>
       ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard loginData={loginData} /> },
         { path: "", element: <Dashboard loginData={loginData} /> },
         { path: "recipes", element: <RecipesList /> },
-        { path: "recipe-data", element: <RecipeData /> },
+        { path: "recipes-data/:mode/:id?", element: <RecipeData /> },
         { path: "categories", element: <CategoriesList /> },
         { path: "users", element: <UsersList /> },
         { path: "favourits", element: <FavList /> },

@@ -83,7 +83,7 @@ export default function RecipesList() {
         <div>
           <button
             onClick={() => {
-              navigate("/dashboard/recipe-data");
+              navigate("/dashboard/recipes-data/add");
             }}
             className="btn btn-success px-3 fw-bold"
           >
@@ -98,80 +98,95 @@ export default function RecipesList() {
             <p className="mt-2">Loading Recipes...</p>
           </div>
         ) : recipesList.length > 0 ? (
-          <table className=" table ">
-            <thead>
-              <tr className=" text-center table-head">
-                <th scope="col">Id</th>
-                <th scope="col">name</th>
-                <th scope="col">Image</th>
-                <th scope="col">Price</th>
-                <th scope="col">Description</th>
-                <th scope="col">Tag</th>
-                <th scope="col">Category</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recipesList.map((recipe) => (
-                <tr className=" text-center " key={recipe.id}>
-                  <th scope="row">{recipe.id}</th>
-                  <td>{recipe.name}</td>
-                  <td>
-                    {recipe.imagePath ? (
-                      <img
-                        src={`https://upskilling-egypt.com:3006/${recipe.imagePath}`}
-                        className="table-img"
-                        alt="recipe-img"
-                      />
-                    ) : (
-                      <img
-                        src={noDataImg}
-                        className="table-img"
-                        alt="recipe-img"
-                      />
-                    )}
-                  </td>
-                  <td>{recipe.price}</td>
-                  <td>{recipe.description}</td>
-                  <td>{recipe.tag.name}</td>
-                  <td>{recipe.category[0]?.name}</td>
-                  <td>
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="link"
-                        className=" p-0 border-0 no-caret shadow-none  text-dark"
-                      >
-                        <i className="fa-solid fa-ellipsis  " />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="shadow border-0 py-2 custom-dropdown">
-                        <Dropdown.Item
-                          href="#/view"
-                          className="text-success py-2 d-flex align-items-center"
-                        >
-                          <i className="fa-solid fa-eye me-2 text-success" />
-                          View
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          href="#/edit"
-                          className="text-success py-2 d-flex align-items-center"
-                        >
-                          <i className="fa-regular fa-pen-to-square me-2 text-info " />{" "}
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          className="text-danger py-2 d-flex align-items-center"
-                          onClick={() => handleShow(recipe)}
-                        >
-                          <i className="fa-regular fa-trash-can me-2 text-danger" />
-                          Delete
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </td>
+          <div className="table-container">
+            <table className="table custom-table">
+              <thead>
+                <tr className="text-center table-head">
+                  <th scope="col">Id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Tag</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {recipesList.map((recipe) => (
+                  <tr key={recipe.id} className="text-center">
+                    <td scope="col">{recipe.id}</td>
+                    <td scope="col">{recipe.name}</td>
+
+                    <td scope="col">
+                      <img
+                        src={
+                          recipe.imagePath
+                            ? `https://upskilling-egypt.com:3006/${recipe.imagePath}`
+                            : noDataImg
+                        }
+                        className="table-img rounded-3"
+                        alt="recipe"
+                      />
+                    </td>
+
+                    <td scope="col">{recipe.price}</td>
+
+                    <td className="description-cell">{recipe.description}</td>
+
+                    <td scope="col">{recipe.tag?.name}</td>
+                    <td scope="col">{recipe.category?.[0]?.name}</td>
+
+                    <td scope="col">
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="link"
+                          className="p-0 border-0 no-caret shadow-none text-dark"
+                        >
+                          <i className="fa-solid fa-ellipsis" />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="shadow border-0 py-2 custom-dropdown">
+                          <Dropdown.Item
+                            className="text-success py-2 d-flex align-items-center"
+                            onClick={() =>
+                              navigate(
+                                `/dashboard/recipes-data/view/${recipe.id}`,
+                              )
+                            }
+                          >
+                            <i className="fa-solid fa-eye me-2 text-success" />
+                            View
+                          </Dropdown.Item>
+
+                          <Dropdown.Item
+                            className="text-success py-2 d-flex align-items-center"
+                            onClick={() =>
+                              navigate(
+                                `/dashboard/recipes-data/edit/${recipe.id}`,
+                              )
+                            }
+                          >
+                            <i className="fa-regular fa-pen-to-square me-2 text-info" />
+                            Edit
+                          </Dropdown.Item>
+
+                          <Dropdown.Item
+                            className="text-danger py-2 d-flex align-items-center"
+                            onClick={() => handleShow(recipe)}
+                          >
+                            <i className="fa-regular fa-trash-can me-2 text-danger" />
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <NoData />
         )}

@@ -16,7 +16,7 @@ export default function Dashboard({ loginData }) {
         secPading={"py-3"}
         imgWidth={"w-75"}
       />
-      <FillRecipes navTo={"recipes"} />
+      <FillRecipes recipeAction={"Fill"} />
     </div>
   );
 }
