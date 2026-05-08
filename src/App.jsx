@@ -18,30 +18,16 @@ import CategoriesList from "./modules/Categories/components/CategoriesList/Categ
 import UsersList from "./modules/Users/components/UsersList/UsersList";
 import FavList from "./modules/Favourites/components/FavList/FavList";
 import { ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import ProtectedRoutes from "./modules/Shared/components/ProtectedRoutes/ProtectedRoutes";
 function App() {
-  let [loginData, setLoginData] = useState(null);
-
-  const saveLoginData = () => {
-    const encodedToken = localStorage.getItem("token");
-    const decodedToken = jwtDecode(encodedToken);
-    setLoginData(decodedToken);
-  };
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      saveLoginData();
-    }
-  }, []);
   const routes = createBrowserRouter([
     {
       path: "",
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login saveLoginData={saveLoginData} /> },
-        { path: "login", element: <Login saveLoginData={saveLoginData} /> },
+        { index: true, element: <Login /> },
+        { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
@@ -51,19 +37,41 @@ function App() {
     {
       path: "dashboard",
       element: (
-        <ProtectedRoutes loginData={loginData}>
-          <MasterLayout loginData={loginData} setLoginData={setLoginData} />
+        <ProtectedRoutes>
+          <MasterLayout />
         </ProtectedRoutes>
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard loginData={loginData} /> },
-        { path: "", element: <Dashboard loginData={loginData} /> },
+        { index: true, element: <Dashboard /> },
+        { path: "", element: <Dashboard /> },
         { path: "recipes", element: <RecipesList /> },
         { path: "recipes-data/:mode/:id?", element: <RecipeData /> },
-        { path: "categories", element: <CategoriesList /> },
-        { path: "users", element: <UsersList /> },
-        { path: "favourits", element: <FavList /> },
+        {
+          path: "categories",
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin", "Admin"]}>
+              <CategoriesList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin", "Admin"]}>
+              <UsersList />
+            </ProtectedRoutes>
+          ),
+        },
+
+        {
+          path: "favourits",
+          element: (
+            <ProtectedRoutes allowedRoles={["SystemUser"]}>
+              <FavList />
+            </ProtectedRoutes>
+          ),
+        },
       ],
     },
   ]);

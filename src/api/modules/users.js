@@ -1,7 +1,7 @@
 import axiosClient from "../axiosClient";
 
-export const GetUsers = (data) => {
-  return axiosClient.get("/Users", { data });
+export const GetUsers = (pageNumber = 1, pageSize = 5) => {
+  return axiosClient.get("/Users", { params: { pageNumber, pageSize } });
 };
 
 export const GetUserById = (id) => {

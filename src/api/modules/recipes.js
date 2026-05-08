@@ -1,9 +1,22 @@
 import axiosClient from "../axiosClient";
 
-export const GetRecipes = () => {
-  return axiosClient.get("/Recipe");
+export const GetRecipes = (
+  pageNumber = 1,
+  pageSize = 5,
+  name = "",
+  tagId = "",
+  categoryId = "",
+) => {
+  return axiosClient.get("/Recipe", {
+    params: {
+      pageNumber,
+      pageSize,
+      name,
+      tagId,
+      categoryId,
+    },
+  });
 };
-
 export const CreateRecipes = (data) => {
   return axiosClient.post("/Recipe", data);
 };

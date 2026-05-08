@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthAPI } from "../../../../api";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
 
-export default function Login({ saveLoginData }) {
+export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const  {saveLoginData} = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
   const {

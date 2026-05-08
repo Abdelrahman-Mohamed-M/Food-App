@@ -10,6 +10,7 @@ import DeleteConfirmation from "../../../Shared/components/DeleteConfirm/DeleteC
 import { Modal, Button } from "react-bootstrap";
 
 import CategoryData from "../CategoryData/CategoryData";
+import CustomPagination from "../../../Shared/components/CustomPagination/CustomPagination";
 
 export default function CategoriesList() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -39,18 +40,25 @@ export default function CategoriesList() {
     setSelectedItem(null);
     setShowModal(true);
   };
-  const getCategoriesList = async () => {
+  const getCategoriesList = async (page = 1) => {
     setIsLoading(true);
 
     try {
-      let response = await CategoriesAPI.GetCategories();
+      let response = await CategoriesAPI.GetCategories(page, 5);
+
       setCategoriesList(response.data.data);
+      setTotalPages(response.data.totalNumberOfPages);
     } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Delete Category
   const deleteCategories = async () => {
     try {
       await axiosClient.delete(`/Category/${selectedItem.id}`);
@@ -59,7 +67,7 @@ export default function CategoriesList() {
         autoClose: 1000,
       });
       handleClose();
-      getCategoriesList();
+      getCategoriesList(currentPage);
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong", {
         theme: "dark",
@@ -69,9 +77,8 @@ export default function CategoriesList() {
   };
 
   useEffect(() => {
-    getCategoriesList();
-  }, []);
-
+    getCategoriesList(currentPage);
+  }, [currentPage]);
   return (
     <div className="categories-container ">
       <Header
@@ -175,6 +182,11 @@ export default function CategoriesList() {
                 ))}
               </tbody>
             </table>
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         ) : (
           <NoData />

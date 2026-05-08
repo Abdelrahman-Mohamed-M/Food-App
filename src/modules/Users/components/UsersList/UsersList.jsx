@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import NoData from "../../../Shared/components/NoData/NoData";
 import DeleteConfirmation from "../../../Shared/components/DeleteConfirm/DeleteConfirm";
 import { UsersAPI } from "../../../../api";
+import CustomPagination from "../../../Shared/components/CustomPagination/CustomPagination";
 
 export default function UsersList() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -19,14 +20,19 @@ export default function UsersList() {
     setSelectedItem(user);
     setShow(true);
   };
-  const getUsersList = async () => {
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const getUsersList = async (page = 1) => {
     setIsLoading(true);
 
     try {
-      let response = await UsersAPI.GetUsers();
+      let response = await UsersAPI.GetUsers(page, 5);
+
       setUsersList(response.data.data);
+      setTotalPages(response.data.totalNumberOfPages);
     } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -39,7 +45,7 @@ export default function UsersList() {
         autoClose: 1000,
       });
       handleClose();
-      getUsersList();
+      getUsersList(currentPage);
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong", {
         theme: "dark",
@@ -49,8 +55,8 @@ export default function UsersList() {
   };
 
   useEffect(() => {
-    getUsersList();
-  }, []);
+    getUsersList(currentPage);
+  }, [currentPage]);
   return (
     <div className="users-container ">
       <Header
@@ -61,7 +67,7 @@ export default function UsersList() {
         }
         imgUrl={groupImg}
         imgWidth={"w-50"}
-        secPading={"py-1"}
+        secPading={"py-2"}
       />
       <DeleteConfirmation
         show={show}
@@ -142,6 +148,11 @@ export default function UsersList() {
                 ))}
               </tbody>
             </table>
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         ) : (
           <NoData />

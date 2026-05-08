@@ -1,7 +1,12 @@
 import axiosClient from "../axiosClient";
 
-export const GetCategories = () => {
-  return axiosClient.get("/Category");
+export const GetCategories = (pageNumber = 1, pageSize = 5) => {
+  return axiosClient.get("/Category", {
+    params: {
+      pageNumber,
+      pageSize,
+    },
+  });
 };
 
 export const CreateCategory = (data) => {
@@ -15,7 +20,6 @@ export const GetCategoryById = (id) => {
 export const UpdateCategory = (id, data) => {
   return axiosClient.put(`/Category/${id}`, data);
 };
-
 
 export const DeleteCategory = (id) => {
   return axiosClient.delete(`/Category/${id}`);
